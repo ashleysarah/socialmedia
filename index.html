@@ -266,10 +266,15 @@
   /* ---------- BRANDS ---------- */
   .brands{ background:var(--paper); }
   .brand-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
-    gap:16px;
+    overflow:hidden;
     margin-top:56px;
+  }
+  .brand-track{
+    display:flex; gap:16px;
+    will-change:transform;
+  }
+  .brand-track .brand-cell{
+    flex:0 0 calc((100% - 32px)/3);
   }
   .brand-cell{
     display:flex; align-items:center; justify-content:center;
@@ -284,9 +289,13 @@
   .brand-name{ display:none; }
 
   @media (max-width:640px){
-    .brand-grid{
-      display:flex; flex-direction:column; gap:0; margin-top:36px;
+    .brand-grid{ overflow:visible; margin-top:36px; }
+    .brand-track{
+      display:flex; flex-direction:column; gap:0;
+      transform:none !important; transition:none !important;
     }
+    .brand-track .brand-cell{ flex:auto; width:100%; }
+    .brand-track .brand-cell[aria-hidden="true"]{ display:none; }
     .brand-cell{
       justify-content:flex-start; gap:18px; padding:20px 4px;
       border:none; border-radius:0; border-bottom:1px solid var(--line);
@@ -344,7 +353,9 @@
     font-size:1.2rem; text-decoration:none;
     border-bottom:1px solid rgba(245,233,236,0.3); padding-bottom:6px; width:fit-content;
     transition:border-color .2s, opacity .2s;
+    display:flex; align-items:center; gap:12px;
   }
+  .cta-link svg{ width:22px; height:22px; flex-shrink:0; }
   .cta-link:hover{ border-color:var(--pink); }
   .cta-foot{ font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase; opacity:0.55; }
 
@@ -457,7 +468,7 @@
             <div class="fact"><dt>Profissão</dt><dd>Estagiária bancária</dd></div>
             <div class="fact"><dt>Manequim</dt><dd>Tam M–40 · Sapato 37</dd></div>
           </dl>
-          <p class="about-quote">Cresci meu perfil sendo a amiga. Me relaciono com a minha audiência pela transparência, mostrando o que todo mundo vive mas ninguém posta.</p>
+          <p class="about-quote">Cresci meu perfil sendo a amiga: mostro o que todo mundo vive mas ninguém posta, do penteado que aguenta o dia inteiro de trabalho ao produto de sobrancelha que eu mesma tô querendo comprar. Cabelo cacheado, rotina real e um jeito diferente de brincar com o que minha audiência consome.</p>
         </div>
       </div>
     </div>
@@ -507,13 +518,19 @@
     <h2 class="section-title" style="margin-bottom:0;">Empresas que já confiaram<br>no meu trabalho</h2>
   </div>
   <div class="brand-grid">
-    <div class="brand-cell"><img src="assets/logos/benefit.png" alt="Benefit Cosmetics"><span class="brand-name">Benefit Cosmetics</span></div>
-    <div class="brand-cell"><img src="assets/logos/depcare.png" alt="Depcare"><span class="brand-name">Depcare</span></div>
-    <div class="brand-cell"><img class="tall" src="assets/logos/kamaleao.png" alt="Kamaleão Color"><span class="brand-name">Kamaleão Color</span></div>
-    <div class="brand-cell"><img src="assets/logos/vivo.png" alt="Vivo" style="max-height:34px;"><span class="brand-name">Vivo</span></div>
-    <div class="brand-cell"><img src="assets/logos/amend.png" alt="Amend"><span class="brand-name">Amend</span></div>
-    <div class="brand-cell"><img src="assets/logos/menteguia.png" alt="Mente Guia"><span class="brand-name">Mente Guia</span></div>
-    <div class="brand-cell"><img class="tall" src="assets/logos/astronauta.png" alt="Astronauta Urbano Podcast"><span class="brand-name">Astronauta Urbano Podcast</span></div>
+    <div class="brand-track" id="brandTrack">
+      <div class="brand-cell"><img src="assets/logos/benefit.png" alt="Benefit Cosmetics"><span class="brand-name">Benefit Cosmetics</span></div>
+      <div class="brand-cell"><img src="assets/logos/depcare.png" alt="Depcare"><span class="brand-name">Depcare</span></div>
+      <div class="brand-cell"><img class="tall" src="assets/logos/kamaleao.png" alt="Kamaleão Color"><span class="brand-name">Kamaleão Color</span></div>
+      <div class="brand-cell"><img src="assets/logos/vivo.png" alt="Vivo" style="max-height:34px;"><span class="brand-name">Vivo</span></div>
+      <div class="brand-cell"><img src="assets/logos/amend.png" alt="Amend"><span class="brand-name">Amend</span></div>
+      <div class="brand-cell"><img src="assets/logos/menteguia.png" alt="Mente Guia"><span class="brand-name">Mente Guia</span></div>
+      <div class="brand-cell"><img class="tall" src="assets/logos/astronauta.png" alt="Astronauta Urbano Podcast"><span class="brand-name">Astronauta Urbano Podcast</span></div>
+      <!-- duplicated for seamless loop (desktop only) -->
+      <div class="brand-cell" aria-hidden="true"><img src="assets/logos/benefit.png" alt=""><span class="brand-name">Benefit Cosmetics</span></div>
+      <div class="brand-cell" aria-hidden="true"><img src="assets/logos/depcare.png" alt=""><span class="brand-name">Depcare</span></div>
+      <div class="brand-cell" aria-hidden="true"><img class="tall" src="assets/logos/kamaleao.png" alt=""><span class="brand-name">Kamaleão Color</span></div>
+    </div>
   </div>
 </section>
 
@@ -553,7 +570,18 @@
     <h2 class="cta-title display">Vamos trabalhar <i>juntos?</i></h2>
     <div class="cta-row">
       <div class="cta-links">
-        <a class="cta-link" href="https://www.tiktok.com/@sallvius" target="_blank" rel="noopener">TikTok — @sallvius</a>
+        <a class="cta-link" href="https://www.tiktok.com/@sallvius" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3.2v13.4c0 1.6-1.3 2.9-2.9 2.9-1.6 0-2.9-1.3-2.9-2.9 0-1.6 1.3-2.9 2.9-2.9.3 0 .6 0 .9.1V9.3c-.3 0-.6-.1-.9-.1-3.4 0-6.2 2.8-6.2 6.2S7 21.6 10.4 21.6s6.2-2.8 6.2-6.2V8.5c1.2.9 2.7 1.4 4.3 1.4V6.7c-2.4 0-4.4-1.9-4.4-4.3V2z"/></svg>
+          TikTok — @sallvius
+        </a>
+        <a class="cta-link" href="https://www.instagram.com/ashleynasc" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+          Instagram — @ashleynasc
+        </a>
+        <a class="cta-link" href="https://mail.google.com/mail/?view=cm&fs=1&to=sashleycontato@gmail.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>
+          sashleycontato@gmail.com
+        </a>
       </div>
       <div class="cta-foot">Mídia kit atualizado · 2026</div>
     </div>
@@ -606,6 +634,52 @@
     vnBtn.classList.remove('playing');
     vnFill.style.width = '0%';
   });
+
+  // Brands carousel (desktop only) — auto-advance one logo at a time, seamless loop
+  (function(){
+    const track = document.getElementById('brandTrack');
+    if (!track) return;
+    const originalCount = 7; // real logos before the 3 duplicated for looping
+    let index = 0;
+    let timer = null;
+
+    function isDesktop(){ return window.matchMedia('(min-width: 641px)').matches; }
+
+    function tick(){
+      if (!isDesktop()) return;
+      const cell = track.querySelector('.brand-cell');
+      if (!cell) return;
+      const gap = parseFloat(getComputedStyle(track).gap) || 16;
+      const cellWidth = cell.getBoundingClientRect().width + gap;
+      index++;
+      track.style.transition = 'transform .7s ease';
+      track.style.transform = `translateX(-${cellWidth * index}px)`;
+      if (index >= originalCount){
+        setTimeout(() => {
+          track.style.transition = 'none';
+          index = 0;
+          track.style.transform = 'translateX(0px)';
+        }, 720);
+      }
+    }
+
+    function start(){
+      stop();
+      if (isDesktop()){ timer = setInterval(tick, 3000); }
+    }
+    function stop(){
+      if (timer){ clearInterval(timer); timer = null; }
+    }
+    function handleResize(){
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0px)';
+      index = 0;
+      start();
+    }
+
+    start();
+    window.addEventListener('resize', handleResize);
+  })();
 </script>
 
 </body>
